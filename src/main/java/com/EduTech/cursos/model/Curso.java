@@ -5,14 +5,19 @@ import lombok.*;
 
 @Entity
 @Data
+@Table(name = "cursos")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+    @Column(nullable = false)
     private String titulo;
+    @Column(nullable = false)
     private String descripcion;
+    @Column(nullable = false)
     private String estado;
-    private Long idInstructor;
+    @Column(nullable = false)
+    private long idInstructor;
 }
