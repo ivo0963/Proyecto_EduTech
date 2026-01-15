@@ -1,0 +1,51 @@
+package com.EduTech.cursos.service;
+
+import com.EduTech.cursos.model.Curso;
+import com.EduTech.cursos.model.Material;
+import com.EduTech.cursos.repository.CursoRepository;
+import com.EduTech.cursos.repository.MaterialRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class MaterialService {
+
+    @Autowired
+    private MaterialRepository materialRepository;
+
+    @Autowired
+    private CursoRepository cursoRepository;
+
+    // Agregar material a un curso
+    public Material agregarMaterial(Long idCurso, Material material) {
+        Curso curso = cursoRepository.findById(idCurso)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado con ID: " + idCurso));
+
+        material.setCurso(curso);
+        return materialRepository.save(material);
+    }
+
+    // Listar materiales de un curso
+    public List<Material> listarPorCurso(Long idCurso) {
+        return materialRepository.findByCursoId(idCurso);
+    }
+
+    // Actualizar material
+    public Material actualizarMaterial(Long id, Material detalles) {
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material no encontrado"));
+
+        material.setTitulo(detalles.getTitulo());
+        material.setDescripcion(detalles.getDescripcion());
+        material.setUrlRecurso(detalles.getUrlRecurso());
+
+        return materialRepository.save(material);
+    }
+
+    // Eliminar material
+    public void eliminarMaterial(Long id) {
+        materialRepository.deleteById(id);
+    }
+}
