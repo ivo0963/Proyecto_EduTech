@@ -3,38 +3,45 @@ package com.EduTech.cursos.controller;
 import com.EduTech.cursos.model.Curso;
 import com.EduTech.cursos.service.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cursos")
+@RequestMapping("/cursos")
 public class CursoController {
 
     @Autowired
     private CursoService cursoService;
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Curso curso, @RequestHeader("Rol-Usuario") String rol) {
-        if (!"GERENTE".equalsIgnoreCase(rol)) return ResponseEntity.status(403).body("Solo el Gerente puede crear cursos");
-        return ResponseEntity.ok(cursoService.guardarCurso(curso));
-    }
-
-    @PatchMapping("/{id}/aprobar")
-    public ResponseEntity<?> aprobar(@PathVariable Long id, @RequestHeader("Rol-Usuario") String rol) {
-        if (!"GERENTE".equalsIgnoreCase(rol)) return ResponseEntity.status(403).body("Acceso denegado");
-        return ResponseEntity.ok(cursoService.aprobarCurso(id));
-    }
-
-    @PutMapping("/{id}/asignar/{instructorId}")
-    public ResponseEntity<?> asignar(@PathVariable Long id, @PathVariable Long instructorId, @RequestHeader("Rol-Usuario") String rol) {
-        if (!"GERENTE".equalsIgnoreCase(rol)) return ResponseEntity.status(403).body("Acceso denegado");
-        return ResponseEntity.ok(cursoService.asignarInstructor(id, instructorId));
+    public Curso crearCurso(@RequestBody Curso curso) {
+        return cursoService.guardarCurso(curso);
     }
 
     @GetMapping
-    public List<Curso> listar() {
+    public List<Curso> listarCursos() {
         return cursoService.listarCursos();
+    }
+
+    // Endpoint extra: Ver cursos de un instructor específico
+    @GetMapping("/instructor/{idInstructor}")
+    public List<Curso> listarPorInstructor(@PathVariable Long idInstructor) {
+        return cursoService.listarCursosPorInstructor(idInstructor);
+    }
+
+    @PutMapping("/{id}/aprobar")
+    public Curso aprobarCurso(@PathVariable Long id) {
+        return cursoService.aprobarCurso(id);
+    }
+
+    @PutMapping("/{idCurso}/asignar/{idInstructor}")
+    public Curso asignarInstructor(@PathVariable Long idCurso, @PathVariable Long idInstructor) {
+        return cursoService.asignarInstructor(idCurso, idInstructor);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminarCurso(@PathVariable Long id) {
+        cursoService.eliminarCurso(id);
     }
 }
