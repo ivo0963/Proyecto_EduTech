@@ -28,15 +28,12 @@ public class SimulacionCompleta implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Esperamos un poquito para asegurar que CargaDatos termine primero
         Thread.sleep(1000);
 
         System.out.println("\n=================================================");
         System.out.println("🎬 INICIANDO SIMULACIÓN DE CLASES Y MATRÍCULA");
         System.out.println("=================================================\n");
 
-        // --- PASO 1: RECUPERAR ACTORES (Creados por CargaDatos) ---
-        // Buscamos al profesor y al alumno por su email
         Usuario profe = usuarioRepository.findByEmail("profe@edutech.com").orElse(null);
         Usuario alumno = usuarioRepository.findByEmail("alumno@edutech.com").orElse(null);
 
@@ -49,7 +46,6 @@ public class SimulacionCompleta implements CommandLineRunner {
         System.out.println("   - Instructor: " + profe.getNombre());
         System.out.println("   - Estudiante: " + alumno.getNombre());
 
-        // --- PASO 2: EL PROFESOR CREA UN CURSO ---
         System.out.println("\n👨‍🏫 1. El profesor está creando el curso 'Master en Java'...");
 
         Curso curso = new Curso();
@@ -57,14 +53,11 @@ public class SimulacionCompleta implements CommandLineRunner {
         curso.setDescripcion("Curso completo de Backend 2026");
         curso.setIdInstructor(profe.getId());
 
-        // Guardamos
         Curso cursoGuardado = cursoService.guardarCurso(curso);
 
-        // Aprobamos (simulando al Gerente)
         cursoService.aprobarCurso(cursoGuardado.getId());
         System.out.println("   ✅ Curso creado y APROBADO con ID: " + cursoGuardado.getId());
 
-        // --- PASO 3: EL PROFESOR SUBE MATERIAL ---
         System.out.println("\n📚 2. Subiendo material didáctico...");
         Material mat1 = new Material(null, "Clase 1: Introducción", "Video Bienvenida", "http://youtube.com/v1", cursoGuardado);
         Material mat2 = new Material(null, "Clase 2: Beans y Componentes", "PDF Teórico", "http://drive.com/pdf", cursoGuardado);
@@ -74,7 +67,6 @@ public class SimulacionCompleta implements CommandLineRunner {
 
         System.out.println("   ✅ Materiales cargados al curso.");
 
-        // --- PASO 4: EL ALUMNO SE INSCRIBE ---
         System.out.println("\n🎓 3. El alumno se está inscribiendo...");
 
         try {

@@ -15,14 +15,13 @@ public class Material {
     private Long id;
 
     @Column(nullable = false)
-    private String titulo; // Ej: "Clase 1: Introducción a Java"
+    private String titulo;
 
-    private String descripcion; // Ej: "Video explicativo sobre variables"
+    private String descripcion;
 
     @Column(nullable = false)
-    private String urlRecurso; // Ej: "https://youtube.com/..."
+    private String urlRecurso;
 
-    // CONEXIÓN CLAVE: Muchos materiales pertenecen a UN Curso
     @ManyToOne
     @JoinColumn(name = "id_curso", nullable = false)
     private Curso curso;

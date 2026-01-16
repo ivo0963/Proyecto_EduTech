@@ -14,7 +14,6 @@ public class CursoService {
     private CursoRepository cursoRepository;
 
     public Curso guardarCurso(Curso curso) {
-        // Regla de negocio: Si es nuevo y no tiene estado, es PENDIENTE
         if (curso.getEstado() == null || curso.getEstado().isEmpty()) {
             curso.setEstado("PENDIENTE");
         }
@@ -29,7 +28,6 @@ public class CursoService {
         return cursoRepository.findById(id).orElse(null);
     }
 
-    // Método para el Instructor: ver sus propios cursos
     public List<Curso> listarCursosPorInstructor(Long idInstructor) {
         return cursoRepository.findByIdInstructor(idInstructor);
     }

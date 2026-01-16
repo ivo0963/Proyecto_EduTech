@@ -18,7 +18,6 @@ public class MaterialService {
     @Autowired
     private CursoRepository cursoRepository;
 
-    // Agregar material a un curso
     public Material agregarMaterial(Long idCurso, Material material) {
         Curso curso = cursoRepository.findById(idCurso)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado con ID: " + idCurso));
@@ -27,12 +26,10 @@ public class MaterialService {
         return materialRepository.save(material);
     }
 
-    // Listar materiales de un curso
     public List<Material> listarPorCurso(Long idCurso) {
         return materialRepository.findByCursoId(idCurso);
     }
 
-    // Actualizar material
     public Material actualizarMaterial(Long id, Material detalles) {
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Material no encontrado"));
@@ -44,7 +41,6 @@ public class MaterialService {
         return materialRepository.save(material);
     }
 
-    // Eliminar material
     public void eliminarMaterial(Long id) {
         materialRepository.deleteById(id);
     }

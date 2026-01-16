@@ -24,7 +24,6 @@ public class CursoController {
         return cursoService.listarCursos();
     }
 
-    // Endpoint extra: Ver cursos de un instructor específico
     @GetMapping("/instructor/{idInstructor}")
     public List<Curso> listarPorInstructor(@PathVariable Long idInstructor) {
         return cursoService.listarCursosPorInstructor(idInstructor);

@@ -14,7 +14,6 @@ public class CargaDatos implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Esto es como hacer un SELECT COUNT(*) para no repetir datos
         if (usuarioRepository.count() > 0) {
             System.out.println("ℹ️ La base de datos ya tiene usuarios.");
             return;
@@ -28,7 +27,7 @@ public class CargaDatos implements CommandLineRunner {
         u1.setEmail("gerente@edutech.com");
         u1.setPassword("admin123");
         u1.setRol("GERENTE");
-        usuarioRepository.save(u1); // Esto ejecuta el INSERT
+        usuarioRepository.save(u1);
 
         // --- 2. INSTRUCTOR ---
         Usuario u2 = new Usuario();
@@ -36,7 +35,7 @@ public class CargaDatos implements CommandLineRunner {
         u2.setEmail("profe@edutech.com");
         u2.setPassword("123456");
         u2.setRol("INSTRUCTOR");
-        usuarioRepository.save(u2); // Esto ejecuta el INSERT
+        usuarioRepository.save(u2);
 
         // --- 3. ESTUDIANTE ---
         Usuario u3 = new Usuario();
@@ -44,7 +43,7 @@ public class CargaDatos implements CommandLineRunner {
         u3.setEmail("alumno@edutech.com");
         u3.setPassword("abcdef");
         u3.setRol("ESTUDIANTE");
-        usuarioRepository.save(u3); // Esto ejecuta el INSERT
+        usuarioRepository.save(u3);
 
         System.out.println("✅ ¡Listo! 3 Usuarios creados.");
 
