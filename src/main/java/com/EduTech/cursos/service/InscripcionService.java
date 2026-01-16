@@ -25,14 +25,11 @@ public class InscripcionService {
     private CursoRepository cursoRepository;
 
     public Inscripcion inscribir(Long idUsuario, Long idCurso) {
-
         Usuario alumno = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Alumno no encontrado"));
 
-
         Curso curso = cursoRepository.findById(idCurso)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
-
 
         Inscripcion inscripcion = new Inscripcion();
         inscripcion.setUsuario(alumno);
@@ -49,5 +46,17 @@ public class InscripcionService {
 
     public List<Inscripcion> obtenerInscripcionesPorCurso(Long idCurso) {
         return inscripcionRepository.findByCursoId(idCurso);
+    }
+
+    public Inscripcion actualizarProgreso(Long idInscripcion, Double nuevoPorcentaje) {
+        Inscripcion inscripcion = inscripcionRepository.findById(idInscripcion)
+                .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+
+        if (nuevoPorcentaje < 0 || nuevoPorcentaje > 100) {
+            throw new RuntimeException("El progreso debe estar entre 0 y 100");
+        }
+
+        inscripcion.setProgreso(nuevoPorcentaje);
+        return inscripcionRepository.save(inscripcion);
     }
 }

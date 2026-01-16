@@ -24,8 +24,16 @@ public class InscripcionController {
         return inscripcionService.obtenerInscripcionesPorUsuario(idUsuario);
     }
 
+    // GET http://localhost:8081/inscripciones/curso/1
     @GetMapping("/curso/{idCurso}")
     public List<Inscripcion> listarPorCurso(@PathVariable Long idCurso) {
         return inscripcionService.obtenerInscripcionesPorCurso(idCurso);
+    }
+
+
+    // PUT http://localhost:8081/inscripciones/1/progreso?porcentaje=50.0
+    @PutMapping("/{idInscripcion}/progreso")
+    public Inscripcion actualizarProgreso(@PathVariable Long idInscripcion, @RequestParam Double porcentaje) {
+        return inscripcionService.actualizarProgreso(idInscripcion, porcentaje);
     }
 }
