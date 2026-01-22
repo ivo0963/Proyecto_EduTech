@@ -16,12 +16,16 @@ public class Entrega {
     private Long id;
 
     @Column(nullable = false)
-    private String respuestaAlumno; // Puede ser un texto o un link a un PDF
+    private String respuestaAlumno;
 
-    private Double calificacion;    // La nota (puede ser nula si aun no corrigen)
-    private String feedbackProfesor;// Comentario del profe al corregir
+    private Double calificacion;
+
+    private String feedbackProfesor;
 
     private LocalDateTime fechaEntrega = LocalDateTime.now();
+
+    @Transient
+    private String textoCalificacion;
 
     // Relaciones
     @ManyToOne

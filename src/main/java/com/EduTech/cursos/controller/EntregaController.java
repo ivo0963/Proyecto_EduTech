@@ -28,7 +28,7 @@ public class EntregaController {
     // PUT http://localhost:8081/entregas/calificar/1
     @PutMapping("/calificar/{idEntrega}")
     public Entrega calificar(@PathVariable Long idEntrega, @RequestBody Map<String, Object> payload) {
-        Double nota = Double.valueOf(payload.get("nota").toString());
+        String nota = String.valueOf(payload.get("nota").toString());
         String feedback = (String) payload.get("feedback");
 
         return entregaService.calificarEntrega(idEntrega, nota, feedback);

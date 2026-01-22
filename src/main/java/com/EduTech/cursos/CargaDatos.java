@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class CargaDatos implements CommandLineRunner {
 
     @Autowired
@@ -15,41 +15,42 @@ public class CargaDatos implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (usuarioRepository.count() > 0) {
-            System.out.println("ℹ️ La base de datos ya tiene usuarios.");
+            System.out.println("ℹ️ La base de datos ya tiene usuarios. No se cargarán nuevos.");
             return;
         }
 
-        System.out.println("⏳ Creando usuarios manualmente...");
+        System.out.println("⏳ Generando 10 usuarios de prueba...");
 
-        // --- 1. GERENTE ---
-        Usuario u1 = new Usuario();
-        u1.setNombre("Carlos Gerente");
-        u1.setEmail("gerente@edutech.com");
-        u1.setPassword("admin123");
-        u1.setRol("GERENTE");
-        usuarioRepository.save(u1);
+        crearUsuario("Carlos Gerente", "admin@edutech.com", "admin123", "GERENTE");
 
-        // --- 2. INSTRUCTOR ---
-        Usuario u2 = new Usuario();
-        u2.setNombre("Profesor Java");
-        u2.setEmail("profe@edutech.com");
-        u2.setPassword("123456");
-        u2.setRol("INSTRUCTOR");
-        usuarioRepository.save(u2);
+        crearUsuario("Profe Java", "java@edutech.com", "123456", "INSTRUCTOR");
+        crearUsuario("Profe Python", "python@edutech.com", "123456", "INSTRUCTOR");
+        crearUsuario("Profe Web", "web@edutech.com", "123456", "INSTRUCTOR");
 
-        // --- 3. ESTUDIANTE ---
-        Usuario u3 = new Usuario();
-        u3.setNombre("Alumno Curioso");
-        u3.setEmail("alumno@edutech.com");
-        u3.setPassword("abcdef");
-        u3.setRol("ESTUDIANTE");
-        usuarioRepository.save(u3);
+        for (int i = 1; i <= 6; i++) {
+            crearUsuario(
+                    "Alumno " + i,
+                    "alumno" + i + "@edutech.com",
+                    "pass123",
+                    "ESTUDIANTE"
+            );
+        }
 
-        System.out.println("✅ ¡Listo! 3 Usuarios creados.");
+        System.out.println("✅ ¡Carga completa!");
 
-        // Imprimir en consola para verificar (como un SELECT *)
+        // Imprimir resumen en consola
+        System.out.println("--- LISTA DE USUARIOS EN BD ---");
         usuarioRepository.findAll().forEach(u ->
-                System.out.println("Usuario guardado: ID=" + u.getId() + " | " + u.getNombre())
+                System.out.println("ID: " + u.getId() + " | ROL: " + u.getRol() + " | " + u.getNombre() + " (" + u.getEmail() + ")")
         );
+    }
+
+    private void crearUsuario(String nombre, String email, String password, String rol) {
+        Usuario u = new Usuario();
+        u.setNombre(nombre);
+        u.setEmail(email);
+        u.setPassword(password);
+        u.setRol(rol);
+        usuarioRepository.save(u);
     }
 }

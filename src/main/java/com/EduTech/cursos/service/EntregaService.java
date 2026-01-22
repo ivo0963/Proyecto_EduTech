@@ -33,11 +33,11 @@ public class EntregaService {
         return entregaRepository.save(entrega);
     }
 
-    public Entrega calificarEntrega(Long idEntrega, Double nota, String feedback) {
+    public Entrega calificarEntrega(Long idEntrega, String nota, String feedback) {
         Entrega entrega = entregaRepository.findById(idEntrega)
                 .orElseThrow(() -> new RuntimeException("Entrega no encontrada"));
 
-        entrega.setCalificacion(nota);
+        entrega.setCalificacion(Double.valueOf(nota));
         entrega.setFeedbackProfesor(feedback);
 
         return entregaRepository.save(entrega);
@@ -50,4 +50,5 @@ public class EntregaService {
     public List<Entrega> listarPorEstudiante(Long idEstudiante) {
         return entregaRepository.findByEstudianteId(idEstudiante);
     }
+
 }
