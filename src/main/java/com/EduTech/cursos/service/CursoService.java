@@ -4,7 +4,6 @@ import com.EduTech.cursos.model.Curso;
 import com.EduTech.cursos.repository.CursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -29,7 +28,7 @@ public class CursoService {
     }
 
     public List<Curso> listarCursosPorInstructor(Long idInstructor) {
-        return cursoRepository.findByIdInstructor(idInstructor);
+        return cursoRepository.findByInstructorId(idInstructor);
     }
 
     public Curso aprobarCurso(Long id) {
@@ -42,7 +41,9 @@ public class CursoService {
     public Curso asignarInstructor(Long cursoId, Long instructorId) {
         Curso curso = cursoRepository.findById(cursoId)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
-        curso.setIdInstructor(instructorId);
+
+        curso.setInstructorId(instructorId);
+
         return cursoRepository.save(curso);
     }
 

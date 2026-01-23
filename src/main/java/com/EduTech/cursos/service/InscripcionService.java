@@ -47,6 +47,10 @@ public class InscripcionService {
     public List<Inscripcion> obtenerInscripcionesPorCurso(Long idCurso) {
         return inscripcionRepository.findByCursoId(idCurso);
     }
+    public Inscripcion obtenerPorId(Long id) {
+        return inscripcionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Inscripción no encontrada con ID: " + id));
+    }
 
     public Inscripcion actualizarProgreso(Long idInscripcion, Double nuevoPorcentaje) {
         Inscripcion inscripcion = inscripcionRepository.findById(idInscripcion)

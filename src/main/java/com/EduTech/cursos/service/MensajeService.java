@@ -36,4 +36,8 @@ public class MensajeService {
     public List<Mensaje> obtenerChat(Long idUsuario1, Long idUsuario2) {
         return mensajeRepository.obtenerConversacion(idUsuario1, idUsuario2);
     }
+    public Mensaje obtenerPorId(Long id) {
+        return mensajeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mensaje no encontrado con ID: " + id));
+    }
 }

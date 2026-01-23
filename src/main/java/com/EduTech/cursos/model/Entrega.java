@@ -1,14 +1,12 @@
 package com.EduTech.cursos.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Table(name = "entregas")
-@NoArgsConstructor
-@AllArgsConstructor
+@Data // Lombok genera getters y setters automáticamente
 public class Entrega {
 
     @Id
@@ -22,17 +20,18 @@ public class Entrega {
 
     private String feedbackProfesor;
 
-    private LocalDateTime fechaEntrega = LocalDateTime.now();
-
-    @Transient
-    private String textoCalificacion;
-
-    // Relaciones
-    @ManyToOne
-    @JoinColumn(name = "id_evaluacion", nullable = false)
-    private Evaluacion evaluacion;
+    private LocalDateTime fechaEntrega;
 
     @ManyToOne
     @JoinColumn(name = "id_estudiante", nullable = false)
     private Usuario estudiante;
+
+    @ManyToOne
+    @JoinColumn(name = "id_evaluacion", nullable = false)
+    private Evaluacion evaluacion;
+
+    @PrePersist
+    public void prePersist() {
+        this.fechaEntrega = LocalDateTime.now();
+    }
 }

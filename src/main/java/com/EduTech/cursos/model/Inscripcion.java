@@ -25,5 +25,5 @@ public class Inscripcion {
 
     private LocalDate fechaInscripcion;
 
-    private double progreso; // Ej: 0.0 a 100.0
+    private double progreso;
 }

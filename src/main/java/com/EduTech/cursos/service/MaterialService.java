@@ -40,6 +40,10 @@ public class MaterialService {
 
         return materialRepository.save(material);
     }
+    public Material obtenerPorId(Long id) {
+        return materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material no encontrado con ID: " + id));
+    }
 
     public void eliminarMaterial(Long id) {
         materialRepository.deleteById(id);

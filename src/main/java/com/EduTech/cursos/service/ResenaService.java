@@ -34,6 +34,10 @@ public class ResenaService {
 
         return resenaRepository.save(resena);
     }
+    public Resena obtenerPorId(Long id) {
+        return resenaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reseña no encontrada con ID: " + id));
+    }
 
     public List<Resena> listarPorCurso(Long idCurso) {
         return resenaRepository.findByCursoId(idCurso);

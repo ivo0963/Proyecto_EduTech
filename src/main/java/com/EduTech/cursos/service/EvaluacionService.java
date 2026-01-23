@@ -20,6 +20,10 @@ public class EvaluacionService {
         evaluacion.setCurso(curso);
         return evaluacionRepository.save(evaluacion);
     }
+    public Evaluacion obtenerPorId(Long id) {
+        return evaluacionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Evaluación no encontrada con ID: " + id));
+    }
 
     public Entrega enviarRespuesta(Long idEvaluacion, Long idEstudiante, String respuestaTexto) {
         Evaluacion evaluacion = evaluacionRepository.findById(idEvaluacion)
@@ -53,4 +57,5 @@ public class EvaluacionService {
     public List<Entrega> listarEntregasPorEvaluacion(Long idEvaluacion) {
         return entregaRepository.findByEvaluacionId(idEvaluacion);
     }
+
 }

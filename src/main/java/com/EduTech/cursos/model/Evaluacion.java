@@ -15,10 +15,9 @@ public class Evaluacion {
     private Long id;
 
     @Column(nullable = false)
-    private String titulo;      // Ej: "Examen Final de Java"
-    private String descripcion; // Ej: "Responder en un PDF"
+    private String titulo;
+    private String descripcion;
 
-    // Relación: Muchas evaluaciones pertenecen a UN curso
     @ManyToOne
     @JoinColumn(name = "id_curso", nullable = false)
     private Curso curso;
