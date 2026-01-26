@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,8 +40,11 @@ public class CursoControllerV2Test {
         Curso curso = new Curso();
         curso.setId(1L);
         curso.setTitulo("Java Spring");
+        curso.setInstructorId(1L);
 
-        when(cursoService.crearCurso(any(Curso.class), anyLong())).thenReturn(curso);
+        when(cursoService.guardarCurso(any(Curso.class))).thenReturn(curso);
+
+
         when(cursoAssembler.toModel(any(Curso.class))).thenReturn(EntityModel.of(curso));
 
         Map<String, Object> payload = new HashMap<>();

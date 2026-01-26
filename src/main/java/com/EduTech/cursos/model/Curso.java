@@ -24,4 +24,7 @@ public class Curso {
 
     @Column(name = "id_instructor", nullable = false)
     private Long instructorId;
+
+
+
 }

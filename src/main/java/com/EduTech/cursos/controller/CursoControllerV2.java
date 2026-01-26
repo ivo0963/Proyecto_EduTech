@@ -6,6 +6,7 @@ import com.EduTech.cursos.service.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +22,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v2/cursos")
 public class CursoControllerV2 {
 
-    // --- USAMOS EL SERVICE, NO EL REPOSITORIO ---
     @Autowired
     private CursoService cursoService;
 
     @Autowired
     private CursoModelAssembler cursoAssembler;
 
-    // --- 1. LISTAR TODOS ---
     @GetMapping
     public CollectionModel<EntityModel<Curso>> listarCursos() {
-        // Llamamos al service para obtener la lista
         List<EntityModel<Curso>> cursos = cursoService.listarCursos().stream()
                 .map(cursoAssembler::toModel)
                 .collect(Collectors.toList());
@@ -40,43 +38,46 @@ public class CursoControllerV2 {
                 linkTo(methodOn(CursoControllerV2.class).listarCursos()).withSelfRel());
     }
 
-    // --- 2. OBTENER POR ID ---
     @GetMapping("/{id}")
-    public EntityModel<Curso> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<Curso>> obtenerCurso(@PathVariable Long id) {
         Curso curso = cursoService.obtenerPorId(id);
 
         if (curso == null) {
-            throw new RuntimeException("Curso no encontrado con ID: " + id);
+            return ResponseEntity.notFound().build();
         }
 
-        return cursoAssembler.toModel(curso);
+        return ResponseEntity.ok(cursoAssembler.toModel(curso));
     }
 
-    // --- 3. CREAR CURSO (Usando Map -> Service) ---
     @PostMapping
-    public ResponseEntity<EntityModel<Curso>> crearCurso(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<?> crearCurso(@RequestBody Map<String, Object> payload) {
+        Object idObj = payload.get("instructorId");
 
-        String titulo = (String) payload.get("titulo");
-        String descripcion = (String) payload.get("descripcion");
+        if (idObj == null) {
+            return ResponseEntity.badRequest().body("Error: El campo 'instructorId' es obligatorio.");
+        }
 
-        Long idInstructor = Long.valueOf(payload.get("idInstructor").toString());
+        Long idInstructor = Long.valueOf(idObj.toString());
+        String titulo = (payload.get("titulo") != null) ? payload.get("titulo").toString() : "";
+        String descripcion = (payload.get("descripcion") != null) ? payload.get("descripcion").toString() : "";
 
         Curso nuevoCurso = new Curso();
         nuevoCurso.setTitulo(titulo);
         nuevoCurso.setDescripcion(descripcion);
         nuevoCurso.setInstructorId(idInstructor);
 
-        Curso cursoGuardado = cursoService.guardarCurso(nuevoCurso);
+        Curso cursoCreado = cursoService.guardarCurso(nuevoCurso);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(cursoAssembler.toModel(cursoGuardado));
+        EntityModel<Curso> recurso = EntityModel.of(cursoCreado);
+        recurso.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CursoControllerV2.class)
+                .obtenerCurso(cursoCreado.getId())).withSelfRel());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(recurso);
     }
 
     @PutMapping("/{id}/aprobar")
     public ResponseEntity<EntityModel<Curso>> aprobarCurso(@PathVariable Long id) {
         Curso cursoAprobado = cursoService.aprobarCurso(id);
-
         return ResponseEntity.ok(cursoAssembler.toModel(cursoAprobado));
     }
 
@@ -90,7 +91,6 @@ public class CursoControllerV2 {
         }
 
         Long nuevoIdInstructor = Long.valueOf(payload.get("idInstructor").toString());
-
         Curso cursoActualizado = cursoService.asignarInstructor(id, nuevoIdInstructor);
 
         return ResponseEntity.ok(cursoAssembler.toModel(cursoActualizado));

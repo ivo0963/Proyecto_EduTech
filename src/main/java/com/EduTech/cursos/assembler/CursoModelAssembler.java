@@ -16,7 +16,7 @@ public class CursoModelAssembler implements RepresentationModelAssembler<Curso, 
 
         EntityModel<Curso> model = EntityModel.of(curso);
 
-        model.add(linkTo(methodOn(CursoControllerV2.class).obtenerPorId(curso.getId())).withSelfRel());
+        model.add(linkTo(methodOn(CursoControllerV2.class).obtenerCurso(curso.getId())).withSelfRel());
 
         model.add(linkTo(methodOn(CursoControllerV2.class).listarCursos()).withRel("lista-cursos"));
 
