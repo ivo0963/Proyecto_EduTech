@@ -12,10 +12,20 @@ public class CursoService {
     @Autowired
     private CursoRepository cursoRepository;
 
+
     public Curso guardarCurso(Curso curso) {
         if (curso.getEstado() == null || curso.getEstado().isEmpty()) {
             curso.setEstado("PENDIENTE");
         }
+        return cursoRepository.save(curso);
+    }
+    public Curso crearCurso(Curso curso, Long instructorId) {
+        curso.setInstructorId(instructorId);
+
+        if (curso.getEstado() == null || curso.getEstado().isEmpty()) {
+            curso.setEstado("PENDIENTE");
+        }
+
         return cursoRepository.save(curso);
     }
 

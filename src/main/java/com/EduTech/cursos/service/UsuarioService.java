@@ -31,8 +31,13 @@ public class UsuarioService {
         }
         throw new RuntimeException("Credenciales inválidas");
     }
+
     public Usuario obtenerPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+    }
+
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email).orElse(null);
     }
 }
