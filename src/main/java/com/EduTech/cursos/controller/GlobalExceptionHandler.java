@@ -1,4 +1,4 @@
-package com.EduTech.cursos.controller; // Usamos el mismo paquete que tus controllers
+package com.EduTech.cursos.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
